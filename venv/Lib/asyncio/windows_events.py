@@ -1,5 +1,10 @@
 """Selector and proactor event loops for Windows."""
 
+import sys
+
+if sys.platform != 'win32':  # pragma: no cover
+    raise ImportError('win32 only')
+
 import _overlapped
 import _winapi
 import errno
@@ -75,9 +80,9 @@ class _OverlappedFuture(futures.Future):
             self._loop.call_exception_handler(context)
         self._ov = None
 
-    def cancel(self):
+    def cancel(self, msg=None):
         self._cancel_overlapped()
-        return super().cancel()
+        return super().cancel(msg=msg)
 
     def set_exception(self, exception):
         super().set_exception(exception)
@@ -149,9 +154,9 @@ class _BaseWaitHandleFuture(futures.Future):
 
         self._unregister_wait_cb(None)
 
-    def cancel(self):
+    def cancel(self, msg=None):
         self._unregister_wait()
-        return super().cancel()
+        return super().cancel(msg=msg)
 
     def set_exception(self, exception):
         self._unregister_wait()
@@ -318,9 +323,13 @@ class ProactorEventLoop(proactor_events.BaseProactorEventLoop):
             if self._self_reading_future is not None:
                 ov = self._self_reading_future._ov
                 self._self_reading_future.cancel()
-                # self_reading_future was just cancelled so it will never be signalled
-                # Unregister it otherwise IocpProactor.close will wait for it forever
-                if ov is not None:
+                # self_reading_future always uses IOCP, so even though it's
+                # been cancelled, we need to make sure that the IOCP message
+                # is received so that the kernel is not holding on to the
+                # memory, possibly causing memory corruption later. Only
+                # unregister it if IO is complete in all respects. Otherwise
+                # we need another _poll() later to complete the IO.
+                if ov is not None and not ov.pending:
                     self._proactor._unregister(ov)
                 self._self_reading_future = None
 
@@ -357,6 +366,10 @@ class ProactorEventLoop(proactor_events.BaseProactorEventLoop):
                     return
 
                 f = self._proactor.accept_pipe(pipe)
+            except BrokenPipeError:
+                if pipe and pipe.fileno() != -1:
+                    pipe.close()
+                self.call_soon(loop_accept_pipe)
             except OSError as exc:
                 if pipe and pipe.fileno() != -1:
                     self.call_exception_handler({
@@ -368,6 +381,7 @@ class ProactorEventLoop(proactor_events.BaseProactorEventLoop):
                 elif self._debug:
                     logger.warning("Accept pipe failed on pipe %r",
                                    pipe, exc_info=True)
+                self.call_soon(loop_accept_pipe)
             except exceptions.CancelledError:
                 if pipe:
                     pipe.close()
@@ -430,7 +444,11 @@ class IocpProactor:
             self._poll(timeout)
         tmp = self._results
         self._results = []
-        return tmp
+        try:
+            return tmp
+        finally:
+            # Needed to break cycles when an exception occurs.
+            tmp = None
 
     def _result(self, value):
         fut = self._loop.create_future()
@@ -469,7 +487,7 @@ class IocpProactor:
             else:
                 ov.ReadFileInto(conn.fileno(), buf)
         except BrokenPipeError:
-            return self._result(b'')
+            return self._result(0)
 
         def finish_recv(trans, key, ov):
             try:
@@ -812,6 +830,8 @@ class IocpProactor:
                 else:
                     f.set_result(value)
                     self._results.append(f)
+                finally:
+                    f = None
 
         # Remove unregistered futures
         for ov in self._unregistered:
