@@ -1,5 +1,6 @@
 import sys
 import traceback
+from src.logger import logging
 
 
 def error_message_details(error: Exception, error_detail=sys) -> str:
