@@ -1,0 +1,3 @@
+data_source:
+  type: csv
+  path: notebook/data/StudentsPerformance.csv

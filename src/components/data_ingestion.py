@@ -63,7 +63,9 @@ class DataIngestion:
             train_set.to_csv(train_data_path, index= False)
             test_set.to_csv(test_data_path, index= False)
             logging.info(f"train and test data saved at: {train_data_path} and {test_data_path}")
+
             return train_set, test_set
+        
         except Exception as e:
             raise CustomException(e, sys)
         
