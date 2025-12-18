@@ -116,5 +116,3 @@ if __name__ == "__main__":
     transformer = DataTransformation(config_path)
     train_arr, test_arr = transformer.initiate_data_transformation()
     print("Data transformation completed successfully")
-    print("Transformed training array shape:", train_arr.shape)
-    print("Transformed testing array shape:", test_arr.shape)
