@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/User/Documents/END-TO-END DS PROJECT/mlruns/346937308034770731/6802a572a38d4a1f97bd5f6d101db8ec/artifacts
+end_time: 1766073959709
+entry_point_name: ''
+experiment_id: '346937308034770731'
+lifecycle_stage: active
+run_id: 6802a572a38d4a1f97bd5f6d101db8ec
+run_name: Ridge
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766073931008
+status: 3
+tags: []
+user_id: User

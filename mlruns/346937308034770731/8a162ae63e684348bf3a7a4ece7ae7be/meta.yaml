@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/User/Documents/END-TO-END DS PROJECT/mlruns/346937308034770731/8a162ae63e684348bf3a7a4ece7ae7be/artifacts
+end_time: 1766073706196
+entry_point_name: ''
+experiment_id: '346937308034770731'
+lifecycle_stage: active
+run_id: 8a162ae63e684348bf3a7a4ece7ae7be
+run_name: AdaBoost
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766073687664
+status: 3
+tags: []
+user_id: User

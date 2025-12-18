@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/User/Documents/END-TO-END DS PROJECT/mlruns/346937308034770731/79fffd60c574482fb197b4f022eb53cd/artifacts
+end_time: 1766073662533
+entry_point_name: ''
+experiment_id: '346937308034770731'
+lifecycle_stage: active
+run_id: 79fffd60c574482fb197b4f022eb53cd
+run_name: KNN
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766073648191
+status: 3
+tags: []
+user_id: User

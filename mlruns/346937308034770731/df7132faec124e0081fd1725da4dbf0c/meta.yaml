@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/User/Documents/END-TO-END DS PROJECT/mlruns/346937308034770731/df7132faec124e0081fd1725da4dbf0c/artifacts
+end_time: 1766073982360
+entry_point_name: ''
+experiment_id: '346937308034770731'
+lifecycle_stage: active
+run_id: df7132faec124e0081fd1725da4dbf0c
+run_name: RandomForest
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766073970633
+status: 3
+tags: []
+user_id: User

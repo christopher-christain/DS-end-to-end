@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/User/Documents/END-TO-END DS PROJECT/mlruns/346937308034770731/models/m-e875d43d7a1e46ccafc20b06efd50506/artifacts
+creation_timestamp: 1766073987159
+experiment_id: '346937308034770731'
+last_updated_timestamp: 1766073991513
+model_id: m-e875d43d7a1e46ccafc20b06efd50506
+model_type: null
+name: model
+source_run_id: 3dca1f74f5dc4a078b7cfd8f53eed839
+status: 2
+status_message: null
